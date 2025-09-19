@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitHub Learn - Interactive GitHub Education</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #24292e, #2d333b);
+            color: #f6f8fa;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            border-bottom: 1px solid #444d56;
+            margin-bottom: 30px;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .logo i {
+            font-size: 32px;
+            color: #3fb950;
+        }
+        
+        .logo h1 {
+            font-size: 28px;
+            font-weight: 700;
+            background: linear-gradient(90deg, #3fb950, #2ea043);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: rgba(36, 41, 46, 0.8);
+            padding: 10px 20px;
+            border-radius: 30px;
+            border: 1px solid #444d56;
+        }
+        
+        .score {
+            background: #2ea043;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+        
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 30px;
+            margin-top: 20px;
+        }
+        
+        .sidebar {
+            background: rgba(36, 41, 46, 0.8);
+            border-radius: 15px;
+            padding: 25px;
+            border: 1px solid #444d56;
+            height: fit-content;
+        }
+        
+        .sidebar h2 {
+            font-size: 20px;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #444d56;
+            color: #3fb950;
+        }
+        
+        .topic {
+            background: rgba(45, 51, 59, 0.6);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 1px solid transparent;
+        }
+        
+        .topic:hover {
+            border-color: #3fb950;
+            transform: translateY(-2px);
+        }
+        
+        .topic.active {
+            border-color: #3fb950;
+            background: rgba(63, 185, 80, 0.15);
+        }
+        
+        .topic-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .topic-title {
+            font-weight: 600;
+            font-size: 18px;
+        }
+        
+        .topic-progress {
+            width: 100%;
+            height: 8px;
+            background: #444d56;
+            border-radius: 4px;
+            margin-top: 10px;
+            overflow: hidden;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #3fb950, #2ea043);
+            border-radius: 4px;
+        }
+        
+        .exercise-container {
+            background: rgba(36, 41, 46, 0.8);
+            border-radius: 15px;
+            padding: 30px;
+            border: 1px solid #444d56;
+        }
+        
+        .exercise-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+        
+        .exercise-title {
+            font-size: 24px;
+            font-weight: 700;
+        }
+        
+        .exercise-difficulty {
+            background: #3fb950;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+        
+        .exercise-content {
+            background: rgba(45, 51, 59, 0.6);
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            line-height: 1.6;
+        }
+        
+        .lesson-content {
+            margin-bottom: 20px;
+        }
+        
+        .lesson-content h3 {
+            color: #3fb950;
+            margin-bottom: 15px;
+        }
+        
+        .lesson-content p {
+            margin-bottom: 15px;
+        }
+        
+        .lesson-content pre {
+            background: #1e2227;
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 15px 0;
+            border: 1px solid #444d56;
+        }
+        
+        .lesson-content code {
+            font-family: 'Courier New', monospace;
+            color: #f6f8fa;
+        }
+        
+        .interactive-quiz {
+            background: rgba(45, 51, 59, 0.6);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        
+        .quiz-question {
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+        
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .quiz-option {
+            background: rgba(36, 41, 46, 0.8);
+            padding: 12px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.3s;
+            border: 1px solid #444d56;
+        }
+        
+        .quiz-option:hover {
+            background: rgba(63, 185, 80, 0.15);
+        }
+        
+        .quiz-option.selected {
+            background: rgba(63, 185, 80, 0.3);
+            border-color: #3fb950;
+        }
+        
+        .quiz-option.correct {
+            background: rgba(63, 185, 80, 0.3);
+            border-color: #3fb950;
+        }
+        
+        .quiz-option.incorrect {
+            background: rgba(248, 81, 73, 0.3);
+            border-color: #f85149;
+        }
+        
+        .exercise-feedback {
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            display: none;
+        }
+        
+        .feedback.correct {
+            background: rgba(63, 185, 80, 0.15);
+            color: #3fb950;
+            border-left: 4px solid #3fb950;
+        }
+        
+        .feedback.incorrect {
+            background: rgba(248, 81, 73, 0.15);
+            color: #f85149;
+            border-left: 4px solid #f85149;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .btn {
+            padding: 12px 25px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary {
+            background: #3fb950;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #2ea043;
+            transform: translateY(-2px);
+        }
+        
+        .btn-secondary {
+            background: transparent;
+            color: #f6f8fa;
+            border: 1px solid #444d56;
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(68, 77, 86, 0.4);
+            transform: translateY(-2px);
+        }
+        
+        .hint-container {
+            margin-top: 20px;
+            background: rgba(45, 51, 59, 0.6);
+            border-radius: 10px;
+            padding: 20px;
+            display: none;
+        }
+        
+        .hint-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+            color: #f85149;
+            cursor: pointer;
+        }
+        
+        .hint-content {
+            color: #c9d1d9;
+            line-height: 1.6;
+            padding-top: 15px;
+            border-top: 1px solid #444d56;
+        }
+        
+        .achievements {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+        
+        .badge {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #3fb950, #2ea043);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            border: 2px solid #444d56;
+        }
+        
+        @media (max-width: 900px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            header {
+                flex-direction: column;
+                gap: 20px;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <i class="fab fa-github"></i>
+                <h1>GitHub Learn</h1>
+            </div>
+            <div class="user-info">
+                <div class="username">@githubstudent</div>
+                <div class="score">320 XP</div>
+            </div>
+        </header>
+        
+        <div class="main-content">
+            <div class="sidebar">
+                <h2>GitHub Learning Path</h2>
+                
+                <div class="topic active">
+                    <div class="topic-header">
+                        <div class="topic-title">GitHub Basics</div>
+                        <div class="topic-status">3/5</div>
+                    </div>
+                    <div class="topic-progress">
+                        <div class="progress-bar" style="width: 60%"></div>
+                    </div>
+                </div>
+                
+                <div class="topic">
+                    <div class="topic-header">
+                        <div class="topic-title">Repositories</div>
+                        <div class="topic-status">2/5</div>
+                    </div>
+                    <div class="topic-progress">
+                        <div class="progress-bar" style="width: 40%"></div>
+                    </div>
+                </div>
+                
+                <div class="topic">
+                    <div class="topic-header">
+                        <div class="topic-title">Branches & Commits</div>
+                        <div class="topic-status">1/5</div>
+                    </div>
+                    <div class="topic-progress">
+                        <div class="progress-bar" style="width: 20%"></div>
+                    </div>
+                </div>
+                
+                <div class="topic">
+                    <div class="topic-header">
+                        <div class="topic-title">Pull Requests</div>
+                        <div class="topic-status">0/5</div>
+                    </div>
+                    <div class="topic-progress">
+                        <div class="progress-bar" style="width: 0%"></div>
+                    </div>
+                </div>
+                
+                <div class="topic">
+                    <div class="topic-header">
+                        <div class="topic-title">GitHub Actions</div>
+                        <div class="topic-status">0/5</div>
+                    </div>
+                    <div class="topic-progress">
+                        <div class="progress-bar" style="width: 0%"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="exercise-container">
+                <div class="exercise-header">
+                    <div class="exercise-title">Understanding GitHub Repositories</div>
+                    <div class="exercise-difficulty">Beginner</div>
+                </div>
+                
+                <div class="exercise-content">
+                    <div class="lesson-content">
+                        <h3>What is a Repository?</h3>
+                        <p>A repository (or repo) is essentially a project's folder where all of the project files are stored, including the revision history of each file.</p>
+                        
+                        <h3>Key Components of a Repository:</h3>
+                        <ul>
+                            <li><strong>README.md</strong> - A file that describes your project (uses Markdown formatting)</li>
+                            <li><strong>License</strong> - A file that defines how others can use your code</li>
+                            <li><strong>Code files</strong> - The actual source code of your project</li>
+                            <li><strong>Commit history</strong> - A record of all changes made to the repository</li>
+                        </ul>
+                        
+                        <h3>Creating a Repository</h3>
+                        <p>To create a new repository on GitHub:</p>
+                        <ol>
+                            <li>Click the '+' icon in the top right and select "New repository"</li>
+                            <li>Name your repository</li>
+                            <li>Add a description (optional but recommended)</li>
+                            <li>Choose between public (visible to everyone) or private (visible only to you and collaborators)</li>
+                            <li>Initialize with a README (good practice for new projects)</li>
+                            <li>Click "Create repository"</li>
+                        </ol>
+                        
+                        <h3>Repository Structure Example:</h3>
+                        <pre><code>my-project/
+│
+├── README.md
+├── LICENSE
+├── .gitignore
+├── src/
+│   └── index.js
+├── docs/
+│   └── instructions.md
+└── tests/
+    └── test.js</code></pre>
+                    </div>
+                    
+                    <div class="interactive-quiz">
+                        <div class="quiz-question">What is the purpose of a README.md file in a GitHub repository?</div>
+                        <div class="quiz-options">
+                            <div class="quiz-option" data-correct="true">To provide documentation and information about the project</div>
+                            <div class="quiz-option">To store secret API keys and passwords</div>
+                            <div class="quiz-option">To execute code when the repository is cloned</div>
+                            <div class="quiz-option">To prevent others from using the code</div>
+                        </div>
+                    </div>
+                    
+                    <div class="interactive-quiz">
+                        <div class="quiz-question">Which of these is a best practice for repository names?</div>
+                        <div class="quiz-options">
+                            <div class="quiz-option">Using spaces and special characters</div>
+                            <div class="quiz-option" data-correct="true">Using lowercase letters and hyphens</div>
+                            <div class="quiz-option">Making them as long and descriptive as possible</div>
+                            <div class="quiz-option">Using uppercase letters for emphasis</div>
+                        </div>
+                    </div>
+                    
+                    <div class="interactive-quiz">
+                        <div class="quiz-question">What does a .gitignore file do?</div>
+                        <div class="quiz-options">
+                            <div class="quiz-option">Tracks all changes in the repository</div>
+                            <div class="quiz-option">Contains the password for the repository</div>
+                            <div class="quiz-option" data-correct="true">Specifies files that Git should ignore</div>
+                            <div class="quiz-option">Describes the project's features</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="exercise-feedback" id="feedback">
+                    <div class="feedback correct">
+                        <h3><i class="fas fa-check-circle"></i> Correct!</h3>
+                        <p>Great job! You've successfully answered the question.</p>
+                    </div>
+                </div>
+                
+                <div class="action-buttons">
+                    <button class="btn btn-primary" id="submit-btn">Check Answers</button>
+                    <button class="btn btn-secondary" id="hint-btn">Show Hint</button>
+                    <button class="btn btn-secondary" id="next-btn">Next Lesson</button>
+                </div>
+                
+                <div class="hint-container" id="hint-container">
+                    <div class="hint-header" id="hint-toggle">
+                        <i class="fas fa-lightbulb"></i>
+                        <h3>Hint</h3>
+                    </div>
+                    <div class="hint-content">
+                        <p>Remember that a README file is meant to help others understand your project. It's typically the first file someone will look at when they visit your repository.</p>
+                        <p>Repository names should be URL-friendly, which is why lowercase and hyphens are recommended.</p>
+                        <p>The .gitignore file helps keep your repository clean by excluding files that don't need to be tracked, like temporary files or build outputs.</p>
+                    </div>
+                </div>
+                
+                <div class="achievements">
+                    <div class="badge">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                    <div class="badge">
+                        <i class="fas fa-code-branch"></i>
+                    </div>
+                    <div class="badge">
+                        <i class="fas fa-medal"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const submitBtn = document.getElementById('submit-btn');
+            const hintBtn = document.getElementById('hint-btn');
+            const nextBtn = document.getElementById('next-btn');
+            const feedback = document.getElementById('feedback');
+            const hintContainer = document.getElementById('hint-container');
+            const hintToggle = document.getElementById('hint-toggle');
+            const quizOptions = document.querySelectorAll('.quiz-option');
+            
+            // Quiz option selection
+            quizOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    // Remove selected class from all options in this quiz
+                    const allOptions = this.parentElement.querySelectorAll('.quiz-option');
+                    allOptions.forEach(opt => opt.classList.remove('selected'));
+                    
+                    // Add selected class to clicked option
+                    this.classList.add('selected');
+                });
+            });
+            
+            // Submit answers button
+            submitBtn.addEventListener('click', function() {
+                let allCorrect = true;
+                let answeredAll = true;
+                
+                // Check each quiz question
+                document.querySelectorAll('.interactive-quiz').forEach(quiz => {
+                    const selectedOption = quiz.querySelector('.quiz-option.selected');
+                    
+                    if (!selectedOption) {
+                        answeredAll = false;
+                        return;
+                    }
+                    
+                    if (selectedOption.dataset.correct !== "true") {
+                        allCorrect = false;
+                        selectedOption.classList.add('incorrect');
+                    } else {
+                        selectedOption.classList.add('correct');
+                    }
+                    
+                    // Show correct answer if user was wrong
+                    if (selectedOption.dataset.correct !== "true") {
+                        const correctOption = quiz.querySelector('.quiz-option[data-correct="true"]');
+                        correctOption.classList.add('correct');
+                    }
+                });
+                
+                if (!answeredAll) {
+                    feedback.innerHTML = `
+                        <div class="feedback incorrect">
+                            <h3><i class="fas fa-times-circle"></i> Incomplete</h3>
+                            <p>Please answer all questions before submitting.</p>
+                        </div>
+                    `;
+                    feedback.style.display = 'block';
+                    return;
+                }
+                
+                if (allCorrect) {
+                    feedback.innerHTML = `
+                        <div class="feedback correct">
+                            <h3><i class="fas fa-check-circle"></i> Excellent!</h3>
+                            <p>You've correctly answered all questions! You understand the basics of GitHub repositories.</p>
+                        </div>
+                    `;
+                } else {
+                    feedback.innerHTML = `
+                        <div class="feedback incorrect">
+                            <h3><i class="fas fa-times-circle"></i> Try Again</h3>
+                            <p>Some answers are incorrect. Review the lesson and try again.</p>
+                        </div>
+                    `;
+                }
+                
+                feedback.style.display = 'block';
+            });
+            
+            // Hint button
+            hintBtn.addEventListener('click', function() {
+                hintContainer.style.display = hintContainer.style.display === 'block' ? 'none' : 'block';
+            });
+            
+            // Hint toggle
+            hintToggle.addEventListener('click', function() {
+                hintContainer.style.display = hintContainer.style.display === 'block' ? 'none' : 'block';
+            });
+            
+            // Next exercise button
+            nextBtn.addEventListener('click', function() {
+                alert('Moving to the next lesson: Working with Branches!');
+                // In a real application, this would load the next lesson
+            });
+            
+            // Topic selection
+            const topics = document.querySelectorAll('.topic');
+            topics.forEach(topic => {
+                topic.addEventListener('click', function() {
+                    topics.forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Update lesson content based on selected topic
+                    const topicTitle = this.querySelector('.topic-title').textContent;
+                    document.querySelector('.exercise-title').textContent = topicTitle;
+                    
+                    // Show loading message (in a real app, this would load new content)
+                    feedback.innerHTML = `
+                        <div class="feedback incorrect">
+                            <h3><i class="fas fa-info-circle"></i> Content Loading</h3>
+                            <p>Loading content for ${topicTitle}...</p>
+                        </div>
+                    `;
+                    feedback.style.display = 'block';
+                    
+                    // Hide feedback after a delay
+                    setTimeout(() => {
+                        feedback.style.display = 'none';
+                    }, 1500);
+                });
+            });
+        });
+    </script>
+</body>
+</html>
